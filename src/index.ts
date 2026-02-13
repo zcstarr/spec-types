@@ -1,16 +1,12 @@
 import * as path from "path";
 import Transpiler from "@json-schema-tools/transpiler";
 import { compileTypescript, StringUtils } from "./util";
-import * as fs from "fs";
-import { promisify } from "util";
+import {readFile, writeFile, mkdir} from "fs/promises";
 import type { JSONSchemaObject } from "@json-schema-tools/meta-schema";
 import Dereferencer from "@json-schema-tools/dereferencer";
 import toml from "@iarna/toml";
 import {getAllSchemas} from "test-open-rpc-spec"
 
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
-const mkdir = promisify(fs.mkdir);
 
 import ts from "typescript";
 import { config } from "process";
@@ -19,6 +15,23 @@ let transpilerCache: Record<string, Transpiler> = {};
 interface GetTranspiler {
   (name: string): Transpiler
 }
+// Programatically construct all the assets tomls pyprojects  generate them 
+// then we will use Knope to have the changesets and versions propogated and committed 
+// this will then allow us to have nice generated assets that can be used in the spec like changesets
+
+const packageJson = {
+  name: "spec-types",
+  version: "1.0.0",
+  description: "Generated programmatically",
+  main: "index.js",
+  scripts: {
+    start: "node index.js"
+  },
+  dependencies: {
+    express: "^4.18.2"
+  }
+};
+
 
 const buildTranspilerCache = async (schemas: Record<string, any>): Promise<GetTranspiler> => {
   const cache: Record<string, Transpiler> = {};
@@ -51,7 +64,26 @@ type Op =
     "type": "compile"; fileNames: string[]; options: ts.CompilerOptions | any, lang: "ts" | "go" | "rs" | "py";
   }
 
-
+// versions to version path
+const tsIndexFile = (schemaNames: string[], outpath: string): string => {
+  const getName = (name: string) => {
+    if(name.toLowerCase() === "legacy") return "Legacy";
+    return `V${name}`;
+  }
+  // import all the schema types
+  const imports = schemaNames.map((name) => {
+  const typeName = getName(name);
+  return [
+    `import type * as ${typeName} from "./${name}/index.ts";`,
+  ]
+  })
+  // export all the schema types
+  const exports = [
+    "",
+    `export type { ${schemaNames.map(getName).join(", ")} }`,
+  ]
+  return imports.concat(exports).join("\n");
+}
 
 const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[] , outpath: string): Op[] => {
   const ops: Op[] = [{ type: "mkdir", path: outpath }]
@@ -59,7 +91,8 @@ const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[] , out
   return ops.concat(schemasNames.flatMap((name) => {
     return [
       { type: "mkdir", path: `${outpath}/${name}` },
-      { type: "write", path: `${outpath}/${name}/index.ts`, content: getTranspiler(name).toTs() }
+      { type: "write", path: `${outpath}/${name}/index.ts`, content: getTranspiler(name).toTs() },
+      { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames, outpath) }
     ];
   })).concat([
     { type: "compile", fileNames: [outpath], options: {
