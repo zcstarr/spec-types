@@ -2,6 +2,9 @@
   "name": "spec-types",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "generate": "bun run src/index.ts"
+  },
   "devDependencies": {
     "@iarna/toml": "^2.2.5",
     "@json-schema-tools/dereferencer": "^1.6.3",

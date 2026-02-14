@@ -290,4 +290,6 @@ const run = async () => {
   ]);
 }
 
-run()
+if (import.meta.main) {
+  run();
+}

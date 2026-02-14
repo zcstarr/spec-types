@@ -1,0 +1,29 @@
+name: Check Generated Code
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Regenerate types
+        run: bun run generate
+
+      - name: Check for stale generated code
+        run: |
+          if ! git diff --exit-code generated/; then
+            echo ""
+            echo "ERROR: Generated code is out of date."
+            echo "Run 'bun run generate' locally and commit the result."
+            exit 1
+          fi
