@@ -1,0 +1,49 @@
+[packages.go]
+versioned_files = ["generated/packages/go/go.mod"]
+changelog = "generated/packages/go/CHANGELOG.md"
+scopes = ["go"]
+
+[packages.py]
+versioned_files = ["generated/packages/py/pyproject.toml"]
+changelog = "generated/packages/py/CHANGELOG.md"
+scopes = ["py"]
+
+[packages.rs]
+versioned_files = ["generated/packages/rs/Cargo.toml"]
+changelog = "generated/packages/rs/CHANGELOG.md"
+scopes = ["rs"]
+
+[packages.ts]
+versioned_files = ["generated/packages/ts/package.json"]
+changelog = "generated/packages/ts/CHANGELOG.md"
+scopes = ["ts"]
+
+[[workflows]]
+name = "prepare-release"
+
+[[workflows.steps]]
+type = "PrepareRelease"
+
+[[workflows.steps]]
+type = "Command"
+command = "git commit -m \"chore: prepare release\""
+
+[[workflows.steps]]
+type = "Command"
+command = "git push"
+
+[[workflows]]
+name = "release"
+
+[[workflows.steps]]
+type = "Release"
+
+[[workflows]]
+name = "document-change"
+
+[[workflows.steps]]
+type = "CreateChangeFile"
+
+[github]
+owner = "open-rpc"
+repo = "spec-types"
