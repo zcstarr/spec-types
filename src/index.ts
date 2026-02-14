@@ -14,6 +14,16 @@ interface GetTranspiler {
   (name: string): Transpiler
 }
 
+// Package assets preserved across rebuilds
+type Lang = "ts" | "go" | "rs" | "py";
+
+interface PackageAssets {
+  version: string;
+  changelogContents: string;
+}
+
+type GetPackageAssets = (lang: Lang) => PackageAssets;
+
 // Operation types for the system 
 type Op = 
   | {
@@ -26,7 +36,7 @@ type Op =
     "type": "mkdir"; path: string;
   }
   | {
-    "type": "compile"; fileNames: string[]; options: ts.CompilerOptions | any, lang: "ts" | "go" | "rs" | "py";
+    "type": "compile"; fileNames: string[]; options: ts.CompilerOptions | any, lang: Lang;
   }
 
 
@@ -54,6 +64,45 @@ const buildTranspilerCache = async (schemas: Record<string, any>): Promise<GetTr
   }
 }
 
+// Reads existing versions and changelogs before the generator wipes directories
+const buildPackageAssetsCache = async (basePath: string): Promise<GetPackageAssets> => {
+  const defaults: PackageAssets = { version: "0.0.0", changelogContents: "" };
+  const cache: Record<string, PackageAssets> = {};
+
+  const tryRead = async (p: string, fallback: string): Promise<string> => {
+    try { return await readFile(p, "utf-8"); } catch { return fallback; }
+  };
+
+  // ts - read version from package.json
+  const tsPkg = await tryRead(`${basePath}/ts/package.json`, "{}");
+  cache["ts"] = {
+    version: JSON.parse(tsPkg).version ?? defaults.version,
+    changelogContents: await tryRead(`${basePath}/ts/CHANGELOG.md`, ""),
+  };
+
+  // rs - read version from Cargo.toml
+  const rsRaw = await tryRead(`${basePath}/rs/Cargo.toml`, "");
+  cache["rs"] = {
+    version: rsRaw ? ((toml.parse(rsRaw) as any)?.package?.version ?? defaults.version) : defaults.version,
+    changelogContents: await tryRead(`${basePath}/rs/CHANGELOG.md`, ""),
+  };
+
+  // py - read version from pyproject.toml
+  const pyRaw = await tryRead(`${basePath}/py/pyproject.toml`, "");
+  cache["py"] = {
+    version: pyRaw ? ((toml.parse(pyRaw) as any)?.project?.version ?? defaults.version) : defaults.version,
+    changelogContents: await tryRead(`${basePath}/py/CHANGELOG.md`, ""),
+  };
+
+  // go - no version in go.mod, uses git tags
+  cache["go"] = {
+    version: "",
+    changelogContents: await tryRead(`${basePath}/go/CHANGELOG.md`, ""),
+  };
+
+  return (lang: Lang): PackageAssets => cache[lang] ?? defaults;
+};
+
 // Index file generators
 
 const tsIndexFile = (schemaNames: string[]): string => {
@@ -79,16 +128,17 @@ const pyInitFile = (schemaNames: string[]): string => {
 
 // Operations generators
 
-const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[] , outpath: string): Op[] => {
+const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
   const ops: Op[] = [{ type: "rm", path: `${outpath}` }, { type: "mkdir", path: outpath }]
   return ops.concat(schemasNames.flatMap((name) => {
     return [
       { type: "mkdir", path: `${outpath}/${name}` },
       { type: "write", path: `${outpath}/${name}/index.ts`, content: getTranspiler(name).toTs() },
-      { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames, outpath) }
+      { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames) }
     ];
   })).concat([
-    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames), null, 2) },
+    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "@open-rpc/spec-types", version: assets.version }), null, 2) },
+    { type: "write", path: `${outpath}/CHANGELOG.md`, content: assets.changelogContents },
     { type: "compile", fileNames: [
       `${outpath}/index.ts`,
       ...schemasNames.map((name) => `${outpath}/${name}/index.ts`),
@@ -104,7 +154,7 @@ const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[] , out
   ]);
 }
 
-const generateRsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string): Op[] => {
+const generateRsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
   const ops: Op[] = [
     { type: "rm", path: outpath },
     { type: "mkdir", path: outpath },
@@ -128,12 +178,17 @@ const generateRsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       {
         type: "write",
         path: `${outpath}/Cargo.toml`,
-        content: toml.stringify(buildCargoToml(schemasNames) as any),
+        content: toml.stringify(buildCargoToml(schemasNames, { name: "open-rpc-spec-types", version: assets.version }) as any),
+      },
+      {
+        type: "write",
+        path: `${outpath}/CHANGELOG.md`,
+        content: assets.changelogContents,
       },
     ]);
 }
 
-const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string): Op[] => {
+const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
   const ops: Op[] = [
     { type: "rm", path: outpath },
     { type: "mkdir", path: outpath },
@@ -156,10 +211,15 @@ const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
         path: `${outpath}/go.mod`,
         content: buildGoMod(),
       },
+      {
+        type: "write",
+        path: `${outpath}/CHANGELOG.md`,
+        content: assets.changelogContents,
+      },
     ]);
 }
 
-const generatePyOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string): Op[] => {
+const generatePyOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
   const pkg = "open_rpc_spec_types";
   const ops: Op[] = [
     { type: "rm", path: outpath },
@@ -184,7 +244,12 @@ const generatePyOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       {
         type: "write",
         path: `${outpath}/pyproject.toml`,
-        content: toml.stringify(buildPyProjectToml() as any),
+        content: toml.stringify(buildPyProjectToml({ name: "open-rpc-spec-types", version: assets.version }) as any),
+      },
+      {
+        type: "write",
+        path: `${outpath}/CHANGELOG.md`,
+        content: assets.changelogContents,
       },
     ]);
 }
@@ -209,12 +274,13 @@ const execute = async (ops: Op[]) => {
 
 const run = async () => {
   const getTranspiler = await buildTranspilerCache(getAllSchemas());
+  const getAssets = await buildPackageAssetsCache("./generated/packages");
   const schemaNames = Object.keys(getAllSchemas());
 
-  const tsOps = generateTsOp(getTranspiler, schemaNames, "./generated/packages/ts");
-  const rsOps = generateRsOp(getTranspiler, schemaNames, "./generated/packages/rs");
-  const goOps = generateGoOp(getTranspiler, schemaNames, "./generated/packages/go");
-  const pyOps = generatePyOp(getTranspiler, schemaNames, "./generated/packages/py");
+  const tsOps = generateTsOp(getTranspiler, schemaNames, "./generated/packages/ts", getAssets("ts"));
+  const rsOps = generateRsOp(getTranspiler, schemaNames, "./generated/packages/rs", getAssets("rs"));
+  const goOps = generateGoOp(getTranspiler, schemaNames, "./generated/packages/go", getAssets("go"));
+  const pyOps = generatePyOp(getTranspiler, schemaNames, "./generated/packages/py", getAssets("py"));
 
   await Promise.all([
     execute(tsOps),
