@@ -1,6 +1,7 @@
 export interface PackageJsonOptions {
   name: string;
   version: string;
+  dependencies: Record<string, string>;
 }
 
 export interface CargoTomlOptions {
@@ -58,7 +59,7 @@ export const buildPyProjectToml = (
 
 export const buildPackageJson = (
   schemaNames: string[],
-  opts: PackageJsonOptions = { name: "@open-rpc/spec-types", version: "0.0.0" },
+  opts: PackageJsonOptions = { name: "@open-rpc/spec-types", version: "0.0.0", dependencies: {} },
 ) => {
   const subpathExports = Object.fromEntries(
     schemaNames.map((name) => [
@@ -86,6 +87,7 @@ export const buildPackageJson = (
       },
       ...subpathExports,
     },
+    dependencies: opts.dependencies,
     files: ["**/*.ts", "**/*.d.ts", "**/*.js", "!node_modules"],
   };
 };

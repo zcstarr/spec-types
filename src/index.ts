@@ -8,6 +8,8 @@ import Dereferencer from "@json-schema-tools/dereferencer";
 import toml from "@iarna/toml";
 import {getAllSchemas} from "test-open-rpc-spec"
 import ts from "typescript";
+import { readFileSync } from "node:fs";
+
 
 
 interface GetTranspiler {
@@ -105,39 +107,50 @@ const buildPackageAssetsCache = async (basePath: string): Promise<GetPackageAsse
 
 // Index file generators
 
-const tsIndexFile = (schemaNames: string[]): string => {
+const tsIndexFile = (schemaNames: string[], specPackageName: string): string => {
   const imports = schemaNames
     .map((name) => `import type * as V${name} from "./${name}/index.js";`);
 
   const reexport = `export type { ${schemaNames.map((name) => `V${name}`).join(", ")} }`;
+  const reexportAll = `export * as spec from "${specPackageName}";`;
 
-  return [...imports, "", reexport].join("\n");
+  return [...imports, "", reexport, reexportAll].join("\n");
 };
 
 const rsLibFile = (schemaNames: string[]): string => {
   return schemaNames.map((name) => `pub mod v${name};`).join("\n") + "\n";
 }
 
-const goPackageFile = (name: string, goCode: string): string => {
-  return `package v${name}\n\n${goCode}\n`;
+const goPackageFile = (name: string, goCode: string, rawSchema: string): string => {
+  const escaped = JSON.stringify(rawSchema);
+  return `package v${name}\n\n${goCode}\n\nconst RawOpenrpcDocument = ${escaped}\n`;
 }
 
 const pyInitFile = (schemaNames: string[]): string => {
   return schemaNames.map((name) => `from . import v${name}`).join("\n") + "\n";
 }
 
+const getPackageJsonSpecDependency = (packageName: string): Record<string, string> => {
+  const selfPkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf-8"));
+  const dependencyValue = selfPkg.dependencies?.[packageName];
+  if (!dependencyValue)
+    throw new Error(`${packageName} not found in package.json`);
+  return { [packageName]: dependencyValue };
+}
 // Operations generators
 
 const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
+  const specPackageName = "test-open-rpc-spec";
+  const deps = getPackageJsonSpecDependency(specPackageName)
   const ops: Op[] = [{ type: "rm", path: `${outpath}` }, { type: "mkdir", path: outpath }]
   return ops.concat(schemasNames.flatMap((name) => {
     return [
       { type: "mkdir", path: `${outpath}/${name}` },
       { type: "write", path: `${outpath}/${name}/index.ts`, content: getTranspiler(name).toTs() },
-      { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames) }
+      { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames,specPackageName) }
     ];
   })).concat([
-    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "@open-rpc/spec-types", version: assets.version }), null, 2) },
+    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "@open-rpc/spec-types", version: assets.version, dependencies: deps }), null, 2) },
     { type: "write", path: `${outpath}/CHANGELOG.md`, content: assets.changelogContents },
     { type: "compile", fileNames: [
       `${outpath}/index.ts`,
@@ -189,6 +202,7 @@ const generateRsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
 }
 
 const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
+  const schemas: Record<string, any> = getAllSchemas();
   const ops: Op[] = [
     { type: "rm", path: outpath },
     { type: "mkdir", path: outpath },
@@ -201,7 +215,7 @@ const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
         {
           type: "write" as const,
           path: `${outpath}/v${name}/v${name}.go`,
-          content: goPackageFile(name, getTranspiler(name).toGo()),
+          content: goPackageFile(name, getTranspiler(name).toGo(), JSON.stringify(schemas[name])),
         },
       ]),
     )

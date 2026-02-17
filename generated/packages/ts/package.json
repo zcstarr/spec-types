@@ -23,6 +23,9 @@
       "default": "./1_3/index.js"
     }
   },
+  "dependencies": {
+    "test-open-rpc-spec": "test-open-rpc-spec-1.3.2.tgz"
+  },
   "files": [
     "**/*.ts",
     "**/*.d.ts",
