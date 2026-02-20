@@ -46,7 +46,7 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: Install dependencies (TS)
         working-directory: generated/packages/ts
         run: bun install
 
