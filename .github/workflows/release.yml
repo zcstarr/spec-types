@@ -23,6 +23,11 @@ jobs:
         with:
           version: 0.22.3
 
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Create GitHub releases
         run: knope release --verbose
         env:
