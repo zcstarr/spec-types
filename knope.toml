@@ -30,7 +30,7 @@ type = "PrepareRelease"
 
 [[workflows.steps]]
 type = "Command"
-command = "git commit -m \"chore: prepare release $version\""
+command = "git commit -m \"chore: prepare release go/$go_version py/$py_version rs/$rs_version ts/$ts_version\""
 
 [[workflows.steps]]
 type = "Command"
@@ -41,10 +41,10 @@ type = "CreatePullRequest"
 base = "master"
 
 [workflows.steps.title]
-template = "chore: prepare release $version"
+template = "chore: prepare release go/$go_version py/$py_version rs/$rs_version ts/$ts_version"
 
 [workflows.steps.body]
-template = "Merging this PR will create a new release\n\n$changelog"
+template = "Merging this PR will create a new release\n\n## Go\n$go_changelog\n\n## Python\n$py_changelog\n\n## Rust\n$rs_changelog\n\n## TypeScript\n$ts_changelog"
 
 [[workflows]]
 name = "release"
