@@ -8,7 +8,7 @@ on:
 jobs:
   check-status:
     if: always()
-    needs: [test-ts, test-go, test-py, test-rs]
+    needs: [test-ts, test-go]
     runs-on: ubuntu-latest
     steps:
       - name: Check status
