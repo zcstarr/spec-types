@@ -6,6 +6,15 @@ on:
   pull_request:
 
 jobs:
+  check-status:
+    if: always()
+    needs: [test-ts, test-go, test-py, test-rs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check status
+        if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+        run: exit 1
+
   test-ts:
     name: TypeScript Install
     runs-on: ubuntu-latest
@@ -16,7 +25,6 @@ jobs:
           node-version: "22"
       - name: Install & smoke test
         run: |
-          cp test-open-rpc-spec-1.3.2.tgz generated/packages/ts/
           cd generated/packages/ts
           npm install --ignore-scripts
           node -e "import('./index.js').then(m => console.log('TS OK:', Object.keys(m)))"
