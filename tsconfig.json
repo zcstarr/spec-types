@@ -5,7 +5,9 @@
       "ESNext",
       "DOM"
     ],
-    "types": [],
+    "types": [
+      "bun"
+    ],
     "typeRoots": [
       "./node_modules/@types"
     ],

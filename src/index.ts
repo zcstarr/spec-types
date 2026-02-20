@@ -1,9 +1,7 @@
-import * as path from "path";
 import Transpiler from "@json-schema-tools/transpiler";
-import { compileTypescript, StringUtils } from "./util";
+import { compileTypescript } from "./util";
 import { buildPackageJson, buildTsConfig, buildCargoToml, buildGoMod, buildPyProjectToml } from "./assets.ts";
-import {readFile, writeFile, mkdir, rmdir, rm} from "fs/promises";
-import type { JSONSchemaObject } from "@json-schema-tools/meta-schema";
+import {readFile, writeFile, mkdir, rm} from "fs/promises";
 import Dereferencer from "@json-schema-tools/dereferencer";
 import toml from "@iarna/toml";
 import {getAllSchemas} from "test-open-rpc-spec"
