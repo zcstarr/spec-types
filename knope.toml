@@ -24,14 +24,6 @@ name = "prepare-release"
 [[workflows.steps]]
 type = "PrepareRelease"
 
-[[workflows.steps]]
-type = "Command"
-command = "git commit -m \"chore: prepare release\""
-
-[[workflows.steps]]
-type = "Command"
-command = "git push"
-
 [[workflows]]
 name = "release"
 
