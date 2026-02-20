@@ -10,6 +10,7 @@
     "@json-schema-tools/dereferencer": "^1.6.3",
     "@json-schema-tools/meta-schema": "^1.8.0",
     "@types/bun": "latest",
+    "@types/node": "^25.3.0",
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.1",
