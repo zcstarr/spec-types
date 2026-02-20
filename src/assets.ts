@@ -33,7 +33,7 @@ export interface GoModOptions {
 }
 
 export const buildGoMod = (
-  opts: GoModOptions = { module: "github.com/open-rpc/spec-types", goVersion: "1.24.5" },
+  opts: GoModOptions = { module: "github.com/open-rpc/spec-types/generated/packages/go", goVersion: "1.24.5" },
 ): string => `module ${opts.module}\n\ngo ${opts.goVersion}\n`;
 
 export interface PyProjectTomlOptions {
