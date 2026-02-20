@@ -1,5 +1,5 @@
 {
-  "name": "spec-types",
+  "name": "test-open-rpc-spec-types",
   "module": "index.ts",
   "type": "module",
   "scripts": {
