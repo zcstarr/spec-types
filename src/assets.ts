@@ -34,7 +34,11 @@ export interface GoModOptions {
 
 export const buildGoMod = (
   opts: GoModOptions = { module: "github.com/zcstarr/spec-types/generated/packages/go", goVersion: "1.24.5" },
-): string => `module ${opts.module}\n\ngo ${opts.goVersion}\n`;
+  version?: string,
+): string => {
+  const versionComment = version ? ` // ${version}` : "";
+  return `module ${opts.module}${versionComment}\n\ngo ${opts.goVersion}\n`;
+};
 
 export interface PyProjectTomlOptions {
   name: string;

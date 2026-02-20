@@ -94,9 +94,11 @@ const buildPackageAssetsCache = async (basePath: string): Promise<GetPackageAsse
     changelogContents: await tryRead(`${basePath}/py/CHANGELOG.md`, ""),
   };
 
-  // go - no version in go.mod, uses git tags
+  // go - version stored as comment on module line: `module foo // v1.2.3`
+  const goModRaw = await tryRead(`${basePath}/go/go.mod`, "");
+  const goVersionMatch = goModRaw.match(/^module\s+\S+\s+\/\/\s*(v\S+)/m);
   cache["go"] = {
-    version: "",
+    version: goVersionMatch?.[1] ?? "",
     changelogContents: await tryRead(`${basePath}/go/CHANGELOG.md`, ""),
   };
 
@@ -223,7 +225,7 @@ const generateGoOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       {
         type: "write",
         path: `${outpath}/go.mod`,
-        content: buildGoMod(),
+        content: buildGoMod(undefined, assets.version || undefined),
       },
       {
         type: "write",
