@@ -1,4 +1,10 @@
 # Changelog
+## 0.0.3 (2026-02-20)
+
+### Fixes
+
+- forced bump ([`bf43eec`](https://github.com/zcstarr/spec-types/commit/bf43eec))
+
 ## 0.0.2 (2026-02-20)
 
 ### Features
