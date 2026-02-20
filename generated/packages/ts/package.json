@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "type": "module",
   "module": "index.ts",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "prepack": "./node_modules/.bin/tsc"
+  },
   "exports": {
     ".": {
       "bun": "./index.ts",
@@ -24,7 +28,10 @@
     }
   },
   "dependencies": {
-    "test-open-rpc-spec": "1.6.0"
+    "test-open-rpc-spec": "^1.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
   },
   "files": [
     "**/*.ts",

@@ -5,55 +5,69 @@ extern crate derive_builder;
 use serde::{Serialize, Deserialize};
 use derive_builder::Builder;
 use std::collections::HashMap;
-/// Openrpc
-///
-/// This string MUST be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OpenRPC Specification version](#versions) that the OpenRPC document uses. The `openrpc` field SHOULD be used by tooling specifications and clients to interpret the OpenRPC document. This is *not* related to the API [`info.version`](#info-version) string.
-///
-pub type Openrpc = String;
-/// InfoObjectTitle
-///
-/// The title of the application.
-///
-pub type InfoObjectTitle = String;
-/// InfoObjectDescription
-///
-/// A verbose description of the application. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
+#[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq)]
+pub enum Openrpc {
+    #[serde(rename = "1.3.2")]
+    OneThreeTwo,
+    #[serde(rename = "1.3.1")]
+    OneThreeOne,
+    #[serde(rename = "1.3.0")]
+    OneThreeZero,
+    #[serde(rename = "1.2.6")]
+    OneTwoSix,
+    #[serde(rename = "1.2.5")]
+    OneTwoFive,
+    #[serde(rename = "1.2.4")]
+    OneTwoFour,
+    #[serde(rename = "1.2.3")]
+    OneTwoThree,
+    #[serde(rename = "1.2.2")]
+    OneTwoTwo,
+    #[serde(rename = "1.2.1")]
+    OneTwoOne,
+    #[serde(rename = "1.2.0")]
+    OneTwoZero,
+    #[serde(rename = "1.1.12")]
+    OneOneOneTwo,
+    #[serde(rename = "1.1.11")]
+    OneOneOneOne,
+    #[serde(rename = "1.1.10")]
+    OneOneOneZero,
+    #[serde(rename = "1.1.9")]
+    OneOneNine,
+    #[serde(rename = "1.1.8")]
+    OneOneEight,
+    #[serde(rename = "1.1.7")]
+    OneOneSeven,
+    #[serde(rename = "1.1.6")]
+    OneOneSix,
+    #[serde(rename = "1.1.5")]
+    OneOneFive,
+    #[serde(rename = "1.1.4")]
+    OneOneFour,
+    #[serde(rename = "1.1.3")]
+    OneOneThree,
+    #[serde(rename = "1.1.2")]
+    OneOneTwo,
+    #[serde(rename = "1.1.1")]
+    OneOneOne,
+    #[serde(rename = "1.1.0")]
+    OneOneZero,
+    #[serde(rename = "1.0.0")]
+    OneZeroZero,
+    #[serde(rename = "1.0.0-rc0")]
+    OneZeroZeroRcZero,
+    #[serde(rename = "1.0.0-rc1")]
+    OneZeroZeroRcOne,
+}
+pub type InfoObjectProperties = String;
 pub type InfoObjectDescription = String;
-/// InfoObjectTermsOfService
-///
-/// A URL to the Terms of Service for the API. MUST be in the format of a URL.
-///
 pub type InfoObjectTermsOfService = String;
-/// InfoObjectVersion
-///
-/// The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-version) or the API implementation version).
-///
 pub type InfoObjectVersion = String;
-/// ContactObjectName
-///
-/// The identifying name of the contact person/organization.
-///
 pub type ContactObjectName = String;
-/// ContactObjectEmail
-///
-/// The email address of the contact person/organization. MUST be in the format of an email address.
-///
 pub type ContactObjectEmail = String;
-/// ContactObjectUrl
-///
-/// The URL pointing to the contact information. MUST be in the format of a URL.
-///
 pub type ContactObjectUrl = String;
-/// SpecificationExtension
-///
-/// This object MAY be extended with [Specification Extensions](#specification-extensions).
-///
 pub type SpecificationExtension = serde_json::Value;
-/// ContactObject
-///
-/// Contact information for the exposed API.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -65,20 +79,8 @@ pub struct ContactObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<ContactObjectUrl>,
 }
-/// LicenseObjectName
-///
-/// The license name used for the API.
-///
 pub type LicenseObjectName = String;
-/// LicenseObjectUrl
-///
-/// A URL to the license used for the API. MUST be in the format of a URL.
-///
 pub type LicenseObjectUrl = String;
-/// LicenseObject
-///
-/// License information for the exposed API.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -88,24 +90,26 @@ pub struct LicenseObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<LicenseObjectUrl>,
 }
-/// InfoObject
-///
-/// The object provides metadata about the API. The metadata MAY be used by the clients if needed, and MAY be presented in editing or documentation generation tools for convenience.
-///
-pub type InfoObject = serde_json::Value;
-/// ExternalDocumentationObjectDescription
-///
-/// A verbose explanation of the documentation. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
+#[builder(setter(strip_option), default)]
+#[serde(default)]
+pub struct InfoObject {
+    pub title: InfoObjectProperties,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<InfoObjectDescription>,
+    #[serde(rename = "termsOfService", skip_serializing_if = "Option::is_none")]
+    pub terms_of_service: Option<InfoObjectTermsOfService>,
+    pub version: InfoObjectVersion,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact: Option<ContactObject>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<LicenseObject>,
+}
 pub type ExternalDocumentationObjectDescription = String;
-/// ExternalDocumentationObjectUrl
-///
-/// The URL for the target documentation. Value MUST be in the format of a URL.
-///
 pub type ExternalDocumentationObjectUrl = String;
 /// ExternalDocumentationObject
 ///
-/// Additional external documentation for this tag.
+/// information about external documentation
 ///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
@@ -115,50 +119,14 @@ pub struct ExternalDocumentationObject {
     pub description: Option<ExternalDocumentationObjectDescription>,
     pub url: ExternalDocumentationObjectUrl,
 }
-/// ServerObjectUrl
-///
-/// A URL to the target host. This URL supports Server Variables and MAY be relative, to indicate that the host location is relative to the location where the OpenRPC document is being served. [Server Variables](#server-variables) are passed into the [Runtime Expression](#runtime-expression) to produce a server URL.
-///
 pub type ServerObjectUrl = String;
-/// ServerObjectName
-///
-/// An optional string describing the name of the server. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type ServerObjectName = String;
-/// ServerObjectDescription
-///
-/// An optional string describing the host designated by the URL. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type ServerObjectDescription = String;
-/// ServerObjectSummary
-///
-/// A short summary of what the server is.
-///
 pub type ServerObjectSummary = String;
-/// ServerObjectVariableDefault
-///
-/// The default value to use for substitution, which SHALL be sent if an alternate value is _not_ supplied. Note this behavior is different than the [Schema Object's](#schema-object) treatment of default values, because in those cases parameter values are optional.
-///
 pub type ServerObjectVariableDefault = String;
-/// ServerObjectVariableDescription
-///
-/// An optional description for the server variable. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type ServerObjectVariableDescription = String;
-/// ServerObjectVariableEnumItem
-///
-/// An enumeration of string values to be used if the substitution options are from a limited set.
-///
 pub type ServerObjectVariableEnumItem = String;
-/// ServerObjectVariableEnum
-///
-/// An enumeration of string values to be used if the substitution options are from a limited set.
-///
 pub type ServerObjectVariableEnum = Vec<ServerObjectVariableEnumItem>;
-/// ServerObjectVariable
-///
-/// An object representing a Server Variable for server URL template substitution.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -170,15 +138,7 @@ pub struct ServerObjectVariable {
     #[serde(rename = "enum", skip_serializing_if = "Option::is_none")]
     pub _enum: Option<ServerObjectVariableEnum>,
 }
-/// ServerObjectVariables
-///
-/// A map between a variable name and its value. The value is passed into the [Runtime Expression](#runtime-expression) to produce a server URL.
-///
 pub type ServerObjectVariables = HashMap<String, serde_json::Value>;
-/// ServerObject
-///
-/// A object representing a Server
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -194,10 +154,6 @@ pub struct ServerObject {
     pub variables: Option<ServerObjectVariables>,
 }
 type AlwaysFalse = serde_json::Value;
-/// Servers
-///
-/// An array of Server Objects, which provide connectivity information to a target server. If the `servers` property is not provided, or is an empty array, the default value would be a [Server Object](#server-object) with a [url](#server-url) value of `localhost`. 
-///
 pub type Servers = Vec<ServerObject>;
 /// MethodObjectName
 ///
@@ -214,20 +170,8 @@ pub type MethodObjectDescription = String;
 /// A short summary of what the method does.
 ///
 pub type MethodObjectSummary = String;
-/// TagObjectName
-///
-/// The name of the tag.
-///
 pub type TagObjectName = String;
-/// TagObjectDescription
-///
-/// A verbose explanation for the tag. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type TagObjectDescription = String;
-/// TagObject
-///
-/// Adds metadata to a single tag that is used by the [Method Object](#method-object). It is not mandatory to have a Tag Object per tag defined in the Method Object instances.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -252,10 +196,6 @@ pub enum TagOrReference {
     TagObject(TagObject),
     ReferenceObject(ReferenceObject),
 }
-/// MethodObjectTags
-///
-/// A list of tags for API documentation control. Tags can be used for logical grouping of methods by resources or any other qualifier.
-///
 pub type MethodObjectTags = Vec<TagOrReference>;
 /// MethodObjectParamStructure
 ///
@@ -274,20 +214,8 @@ pub enum MethodObjectParamStructure {
     #[serde(rename = "either")]
     Either,
 }
-/// ContentDescriptorObjectName
-///
-/// Name of the content that is being described. If the content described is a method parameter assignable [`by-name`](#method-param-structure), this field SHALL define the parameter's key (ie name).
-///
 pub type ContentDescriptorObjectName = String;
-/// ContentDescriptorObjectDescription
-///
-/// A verbose explanation of the content descriptor behavior. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type ContentDescriptorObjectDescription = String;
-/// ContentDescriptorObjectSummary
-///
-/// A short summary of the content that is being described.
-///
 pub type ContentDescriptorObjectSummary = String;
 pub type Id = String;
 pub type Schema = String;
@@ -305,22 +233,11 @@ pub type ExclusiveMinimum = f64;
 pub type NonNegativeInteger = i64;
 pub type NonNegativeIntegerDefaultZero = i64;
 pub type Pattern = String;
-/// JSONSchemaBoolean
-///
-/// Always valid if true. Never valid if false. Is constant.
-///
-pub type JSONSchemaBoolean = bool;
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-#[serde(untagged)]
-pub enum JSONSchema {
-    JSONSchemaObject(Box<JSONSchemaObject>),
-    JSONSchemaBoolean(JSONSchemaBoolean),
-}
 pub type SchemaArray = Vec<JSONSchema>;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum Items {
-    JSONSchema(JSONSchema),
+    JSONSchema(Box<JSONSchema>),
     SchemaArray(SchemaArray),
 }
 pub type UniqueItems = bool;
@@ -357,7 +274,7 @@ pub type PatternProperties = HashMap<String, JSONSchema>;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum DependenciesSet {
-    JSONSchema(JSONSchema),
+    JSONSchema(Box<JSONSchema>),
     StringArray(StringArray),
 }
 pub type Dependencies = HashMap<String, DependenciesSet>;
@@ -428,7 +345,7 @@ pub struct JSONSchemaObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pattern: Option<Pattern>,
     #[serde(rename = "additionalItems", skip_serializing_if = "Option::is_none")]
-    pub additional_items: Option<JSONSchema>,
+    pub additional_items: Option<Box<JSONSchema>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Items>,
     #[serde(rename = "maxItems", skip_serializing_if = "Option::is_none")]
@@ -438,7 +355,7 @@ pub struct JSONSchemaObject {
     #[serde(rename = "uniqueItems", skip_serializing_if = "Option::is_none")]
     pub unique_items: Option<UniqueItems>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub contains: Option<JSONSchema>,
+    pub contains: Option<Box<JSONSchema>>,
     #[serde(rename = "maxProperties", skip_serializing_if = "Option::is_none")]
     pub max_properties: Option<NonNegativeInteger>,
     #[serde(rename = "minProperties", skip_serializing_if = "Option::is_none")]
@@ -446,7 +363,7 @@ pub struct JSONSchemaObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<StringArray>,
     #[serde(rename = "additionalProperties", skip_serializing_if = "Option::is_none")]
-    pub additional_properties: Option<JSONSchema>,
+    pub additional_properties: Option<Box<JSONSchema>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definitions: Option<Definitions>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -456,7 +373,7 @@ pub struct JSONSchemaObject {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dependencies: Option<Dependencies>,
     #[serde(rename = "propertyNames", skip_serializing_if = "Option::is_none")]
-    pub property_names: Option<JSONSchema>,
+    pub property_names: Option<Box<JSONSchema>>,
     #[serde(rename = "const", skip_serializing_if = "Option::is_none")]
     pub _const: Option<AlwaysTrue>,
     #[serde(rename = "enum", skip_serializing_if = "Option::is_none")]
@@ -470,11 +387,11 @@ pub struct JSONSchemaObject {
     #[serde(rename = "contentEncoding", skip_serializing_if = "Option::is_none")]
     pub content_encoding: Option<ContentEncoding>,
     #[serde(rename = "if", skip_serializing_if = "Option::is_none")]
-    pub _if: Option<JSONSchema>,
+    pub _if: Option<Box<JSONSchema>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub then: Option<JSONSchema>,
+    pub then: Option<Box<JSONSchema>>,
     #[serde(rename = "else", skip_serializing_if = "Option::is_none")]
-    pub _else: Option<JSONSchema>,
+    pub _else: Option<Box<JSONSchema>>,
     #[serde(rename = "allOf", skip_serializing_if = "Option::is_none")]
     pub all_of: Option<SchemaArray>,
     #[serde(rename = "anyOf", skip_serializing_if = "Option::is_none")]
@@ -482,28 +399,21 @@ pub struct JSONSchemaObject {
     #[serde(rename = "oneOf", skip_serializing_if = "Option::is_none")]
     pub one_of: Option<SchemaArray>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub not: Option<JSONSchema>,
+    pub not: Option<Box<JSONSchema>>,
 }
+/// JSONSchemaBoolean
+///
+/// Always valid if true. Never valid if false. Is constant.
+///
+pub type JSONSchemaBoolean = bool;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
-pub enum ContentDescriptorObjectSchema {
-    JSONSchemaObject(Box<JSONSchemaObject>),
+pub enum JSONSchema {
+    JSONSchemaObject(JSONSchemaObject),
     JSONSchemaBoolean(JSONSchemaBoolean),
 }
-/// ContentDescriptorObjectRequired
-///
-/// Determines if the content is a required field. Default value is `false`.
-///
 pub type ContentDescriptorObjectRequired = bool;
-/// ContentDescriptorObjectDeprecated
-///
-/// Specifies that the content is deprecated and SHOULD be transitioned out of usage. Default value is `false`.
-///
 pub type ContentDescriptorObjectDeprecated = bool;
-/// ContentDescriptorObject
-///
-/// Content Descriptors are objects that do just as they suggest - describe content. They are reusable ways of describing either parameters or result. They MUST have a schema.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -513,7 +423,7 @@ pub struct ContentDescriptorObject {
     pub description: Option<ContentDescriptorObjectDescription>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<ContentDescriptorObjectSummary>,
-    pub schema: ContentDescriptorObjectSchema,
+    pub schema: Box<JSONSchema>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required: Option<ContentDescriptorObjectRequired>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -525,10 +435,6 @@ pub enum ContentDescriptorOrReference {
     ContentDescriptorObject(ContentDescriptorObject),
     ReferenceObject(ReferenceObject),
 }
-/// MethodObjectParams
-///
-///  A list of parameters that are applicable for this method. The list MUST NOT include duplicated parameters and therefore require [name](#content-descriptor-name) to be unique. The list can use the [Reference Object](#reference-object) to link to parameters that are defined by the [Content Descriptor Object](#content-descriptor-object). All optional params (content descriptor objects with "required": false) MUST be positioned after all required params in the list.
-///
 pub type MethodObjectParams = Vec<ContentDescriptorOrReference>;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
@@ -572,38 +478,14 @@ pub enum ErrorOrReference {
 }
 /// MethodObjectErrors
 ///
-/// A list of custom application defined errors that MAY be returned. The Errors MUST have unique error codes.
+/// Defines an application level error.
 ///
 pub type MethodObjectErrors = Vec<ErrorOrReference>;
-/// LinkObjectName
-///
-/// Cannonical name of the link.
-///
-pub type LinkObjectName = serde_json::Value;
-/// LinkObjectSummary
-///
-/// Short description for the link.
-///
+pub type LinkObjectName = String;
 pub type LinkObjectSummary = String;
-/// LinkObjectMethod
-///
-/// The name of an existing, resolvable OpenRPC method, as defined with a unique `method`. This field MUST resolve to a unique [Method Object](#method-object). As opposed to Open Api, Relative `method` values ARE NOT permitted.
-///
 pub type LinkObjectMethod = String;
-/// LinkObjectDescription
-///
-/// A description of the link. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type LinkObjectDescription = String;
-/// LinkObjectParams
-///
-/// A map representing parameters to pass to a method as specified with `method`. The key is the parameter name to be used, whereas the value can be a constant or a [runtime expression](#runtime-expression) to be evaluated and passed to the linked method.
-///
 pub type LinkObjectParams = serde_json::Value;
-/// LinkObjectServer
-///
-/// A server object to be used by the target method.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -618,56 +500,36 @@ pub struct LinkObjectServer {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub variables: Option<ServerObjectVariables>,
 }
-/// LinkObject
-///
-/// A object representing a Link
-///
-pub type LinkObject = serde_json::Value;
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
+#[builder(setter(strip_option), default)]
+#[serde(default)]
+pub struct LinkObject {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<LinkObjectName>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<LinkObjectSummary>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method: Option<LinkObjectMethod>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<LinkObjectDescription>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub params: Option<LinkObjectParams>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server: Option<LinkObjectServer>,
+}
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum LinkOrReference {
     LinkObject(LinkObject),
     ReferenceObject(ReferenceObject),
 }
-/// MethodObjectLinks
-///
-/// A list of possible links from this method call.
-///
 pub type MethodObjectLinks = Vec<LinkOrReference>;
-/// ExamplePairingObjectName
-///
-/// Name for the example pairing.
-///
 pub type ExamplePairingObjectName = String;
-/// ExamplePairingObjectDescription
-///
-/// A verbose explanation of the example pairing.
-///
 pub type ExamplePairingObjectDescription = String;
-/// ExampleObjectSummary
-///
-/// Short description for the example.
-///
 pub type ExampleObjectSummary = String;
-/// ExampleObjectValue
-///
-/// Embedded literal example. The `value` field and `externalValue` field are mutually exclusive. To represent examples of media types that cannot naturally represented in JSON, use a string value to contain the example, escaping where necessary.
-///
 pub type ExampleObjectValue = serde_json::Value;
-/// ExampleObjectDescription
-///
-/// A verbose explanation of the example. [GitHub Flavored Markdown syntax](https://github.github.com/gfm/) MAY be used for rich text representation.
-///
 pub type ExampleObjectDescription = String;
-/// ExampleObjectName
-///
-/// Cannonical name of the example.
-///
 pub type ExampleObjectName = String;
-/// ExampleObject
-///
-/// The Example object is an object that defines an example that is intended to match the `schema` of a given [Content Descriptor](#content-descriptor-object).
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -685,10 +547,6 @@ pub enum ExampleOrReference {
     ExampleObject(ExampleObject),
     ReferenceObject(ReferenceObject),
 }
-/// ExamplePairingObjectParams
-///
-/// Example parameters.
-///
 pub type ExamplePairingObjectParams = Vec<ExampleOrReference>;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(untagged)]
@@ -696,10 +554,6 @@ pub enum ExamplePairingObjectResult {
     ExampleObject(ExampleObject),
     ReferenceObject(ReferenceObject),
 }
-/// ExamplePairingObject
-///
-/// The Example Pairing object consists of a set of example params and result. The result is what you can expect from the JSON-RPC service given the exact params.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -717,20 +571,8 @@ pub enum ExamplePairingOrReference {
     ExamplePairingObject(ExamplePairingObject),
     ReferenceObject(ReferenceObject),
 }
-/// MethodObjectExamples
-///
-/// Array of [Example Pairing Objects](#example-pairing-object) where each example includes a valid params-to-result [Content Descriptor](#content-descriptor-object) pairing.
-///
 pub type MethodObjectExamples = Vec<ExamplePairingOrReference>;
-/// MethodObjectDeprecated
-///
-/// Declares this method to be deprecated. Consumers SHOULD refrain from usage of the declared method. Default value is `false`.
-///
 pub type MethodObjectDeprecated = bool;
-/// MethodObject
-///
-/// Describes the interface for the given method name. The method name is used as the `method` field of the JSON-RPC body. It therefore MUST be unique.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]
@@ -766,50 +608,14 @@ pub enum MethodOrReference {
     MethodObject(MethodObject),
     ReferenceObject(ReferenceObject),
 }
-/// Methods
-///
-/// The available methods for the API. While it is required, the array may be empty (to handle security filtering, for example).
-///
 pub type Methods = Vec<MethodOrReference>;
-/// SchemaComponents
-///
-/// An object to hold reusable [Schema Objects](#schema-object).
-///
 pub type SchemaComponents = HashMap<String, serde_json::Value>;
-/// LinkComponents
-///
-/// An object to hold reusable [Link Objects](#link-object).
-///
 pub type LinkComponents = HashMap<String, serde_json::Value>;
-/// ErrorComponents
-///
-/// An object to hold reusable [Error Objects](#error-object).
-///
 pub type ErrorComponents = HashMap<String, serde_json::Value>;
-/// ExampleComponents
-///
-/// An object to hold reusable [Example Objects](#example-object).
-///
 pub type ExampleComponents = HashMap<String, serde_json::Value>;
-/// ExamplePairingComponents
-///
-/// An object to hold reusable [Example Pairing Objects](#example-pairing-object).
-///
 pub type ExamplePairingComponents = HashMap<String, serde_json::Value>;
-/// ContentDescriptorComponents
-///
-/// An object to hold reusable [Content Descriptor Objects](#content-descriptor-object).
-///
 pub type ContentDescriptorComponents = HashMap<String, serde_json::Value>;
-/// TagComponents
-///
-/// An object to hold reusable [Tag Objects](#tag-object).
-///
 pub type TagComponents = HashMap<String, serde_json::Value>;
-/// Components
-///
-/// Holds a set of reusable objects for different aspects of the OpenRPC. All objects defined within the components object will have no effect on the API unless they are explicitly referenced from properties outside the components object.
-///
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Builder, Default)]
 #[builder(setter(strip_option), default)]
 #[serde(default)]

@@ -1,7 +1,7 @@
 import * as path from "path";
 import Transpiler from "@json-schema-tools/transpiler";
 import { compileTypescript, StringUtils } from "./util";
-import { buildPackageJson, buildCargoToml, buildGoMod, buildPyProjectToml } from "./assets.ts";
+import { buildPackageJson, buildTsConfig, buildCargoToml, buildGoMod, buildPyProjectToml } from "./assets.ts";
 import {readFile, writeFile, mkdir, rmdir, rm} from "fs/promises";
 import type { JSONSchemaObject } from "@json-schema-tools/meta-schema";
 import Dereferencer from "@json-schema-tools/dereferencer";
@@ -150,7 +150,8 @@ const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames,specPackageName) }
     ];
   })).concat([
-    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "@open-rpc/spec-types", version: assets.version, dependencies: deps }), null, 2) },
+    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "test-open-rpc-spec-types", version: assets.version, dependencies: deps }), null, 2) },
+    { type: "write", path: `${outpath}/tsconfig.json`, content: JSON.stringify(buildTsConfig(), null, 2) },
     { type: "write", path: `${outpath}/CHANGELOG.md`, content: assets.changelogContents },
     { type: "compile", fileNames: [
       `${outpath}/index.ts`,

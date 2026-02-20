@@ -57,6 +57,19 @@ export const buildPyProjectToml = (
   },
 });
 
+export const buildTsConfig = () => ({
+  compilerOptions: {
+    target: "ESNext",
+    module: "NodeNext",
+    moduleResolution: "NodeNext",
+    declaration: true,
+    emitDeclarationOnly: false,
+    strict: true,
+    skipLibCheck: true,
+  },
+  include: ["./**/*.ts"],
+});
+
 export const buildPackageJson = (
   schemaNames: string[],
   opts: PackageJsonOptions = { name: "@open-rpc/spec-types", version: "0.0.0", dependencies: {} },
@@ -78,6 +91,10 @@ export const buildPackageJson = (
     version: opts.version,
     type: "module",
     module: "index.ts",
+    scripts: {
+      build: "./node_modules/.bin/tsc",
+      prepack: "./node_modules/.bin/tsc",
+    },
     exports: {
       ".": {
         bun: "./index.ts",
@@ -88,6 +105,9 @@ export const buildPackageJson = (
       ...subpathExports,
     },
     dependencies: opts.dependencies,
+    devDependencies: {
+      typescript: "^5.0.0",
+    },
     files: ["**/*.ts", "**/*.d.ts", "**/*.js", "!node_modules"],
   };
 };
