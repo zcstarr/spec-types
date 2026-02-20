@@ -1,0 +1,28 @@
+name: Prepare Release
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Install Knope
+        uses: knope-dev/action@v2.1.2
+        with:
+          version: 0.22.2
+
+      - name: Prepare release
+        run: knope prepare-release --verbose

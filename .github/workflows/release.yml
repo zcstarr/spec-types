@@ -1,0 +1,112 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish-py:
+        description: "Publish Python package"
+        type: boolean
+        default: true
+      publish-rs:
+        description: "Publish Rust crate"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Knope
+        uses: knope-dev/action@v2.1.2
+        with:
+          version: 0.22.2
+
+      - name: Create GitHub releases
+        run: knope release --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+  publish-ts:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        working-directory: generated/packages/ts
+        run: bun install
+
+      - name: Publish to npm
+        working-directory: generated/packages/ts
+        run: bun publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-py:
+    if: ${{ inputs.publish-py }}
+    needs: create-release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Build package
+        working-directory: generated/packages/py
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: generated/packages/py/dist/
+
+  publish-rs:
+    if: ${{ inputs.publish-rs }}
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Publish to crates.io
+        working-directory: generated/packages/rs
+        run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+  publish-go:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify Go module tag
+        run: |
+          echo "Go modules use git tags for versioning."
+          echo "The tag created by knope release is sufficient for go get."
+          git tag --list 'go/v*' | tail -5

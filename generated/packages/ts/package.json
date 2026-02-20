@@ -1,0 +1,42 @@
+{
+  "name": "test-open-rpc-spec-types",
+  "version": "0.0.0",
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "prepack": "./node_modules/.bin/tsc"
+  },
+  "exports": {
+    ".": {
+      "bun": "./index.ts",
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./1_4": {
+      "bun": "./1_4/index.ts",
+      "types": "./1_4/index.d.ts",
+      "import": "./1_4/index.js",
+      "default": "./1_4/index.js"
+    },
+    "./1_3": {
+      "bun": "./1_3/index.ts",
+      "types": "./1_3/index.d.ts",
+      "import": "./1_3/index.js",
+      "default": "./1_3/index.js"
+    }
+  },
+  "dependencies": {
+    "test-open-rpc-spec": "^1.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "**/*.ts",
+    "**/*.d.ts",
+    "**/*.js",
+    "!node_modules"
+  ]
+}

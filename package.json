@@ -1,0 +1,24 @@
+{
+  "name": "test-open-rpc-spec-types",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "generate": "bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@iarna/toml": "^2.2.5",
+    "@json-schema-tools/dereferencer": "^1.6.3",
+    "@json-schema-tools/meta-schema": "^1.8.0",
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@json-schema-tools/transpiler": "^1.10.5",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "test-open-rpc-spec": "^1.6.1"
+  }
+}
