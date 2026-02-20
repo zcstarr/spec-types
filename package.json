@@ -19,6 +19,6 @@
     "@json-schema-tools/transpiler": "^1.10.5",
     "eslint": "^10.0.0",
     "eslint-config-prettier": "^10.1.8",
-    "test-open-rpc-spec": "^1.6.0"
+    "test-open-rpc-spec": "^1.6.1"
   }
 }

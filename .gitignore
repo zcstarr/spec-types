@@ -143,3 +143,5 @@ vite.config.ts.timestamp-*
 # Generated TS build artifacts (source of truth is .ts)
 generated/packages/ts/**/*.js
 generated/packages/ts/**/*.d.ts
+LLMLOG.MD
+.DS_Store

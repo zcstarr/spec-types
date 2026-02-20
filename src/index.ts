@@ -164,6 +164,7 @@ const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       declaration: true,
       outDir: outpath,
       strict: true,
+      skipLibCheck: true,
     }, lang: "ts" }
   ]);
 }
