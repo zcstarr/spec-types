@@ -139,3 +139,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 .cursor
+
+# Generated TS build artifacts (source of truth is .ts)
+generated/packages/ts/**/*.js
+generated/packages/ts/**/*.d.ts

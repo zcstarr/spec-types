@@ -1,6 +1,16 @@
 name: Release
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      publish-py:
+        description: "Publish Python package"
+        type: boolean
+        default: true
+      publish-rs:
+        description: "Publish Rust crate"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -35,13 +45,20 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        working-directory: generated/packages/ts
+        run: bun install
+
       - name: Publish to npm
         working-directory: generated/packages/ts
-        run: npm publish --access public
+        run: bun publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   publish-py:
+    if: ${{ inputs.publish-py }}
     needs: create-release
     runs-on: ubuntu-latest
     permissions:
@@ -66,6 +83,7 @@ jobs:
           packages-dir: generated/packages/py/dist/
 
   publish-rs:
+    if: ${{ inputs.publish-rs }}
     needs: create-release
     runs-on: ubuntu-latest
     steps:
