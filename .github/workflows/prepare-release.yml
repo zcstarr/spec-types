@@ -27,4 +27,3 @@ jobs:
       - run: knope prepare-release --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
-        continue-on-error: true
