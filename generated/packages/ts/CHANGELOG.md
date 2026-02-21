@@ -1,4 +1,10 @@
 # Changelog
+## 0.0.4 (2026-02-21)
+
+### Fixes
+
+- switch to npm publish ([`c546a92`](https://github.com/zcstarr/spec-types/commit/c546a92))
+
 ## 0.0.3 (2026-02-20)
 
 ### Fixes
