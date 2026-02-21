@@ -52,7 +52,7 @@ jobs:
 
       - name: Publish to npm
         working-directory: generated/packages/ts
-        run: bun publish --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           BUN_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
