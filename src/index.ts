@@ -4,7 +4,7 @@ import { buildPackageJson, buildTsConfig, buildCargoToml, buildGoMod, buildPyPro
 import {readFile, writeFile, mkdir, rm} from "fs/promises";
 import Dereferencer from "@json-schema-tools/dereferencer";
 import toml from "@iarna/toml";
-import {getAllSchemas} from "test-open-rpc-spec"
+import {getAllSchemas} from "@open-rpc/spec"
 import ts from "typescript";
 import { readFileSync } from "node:fs";
 
@@ -140,7 +140,7 @@ const getPackageJsonSpecDependency = (packageName: string): Record<string, strin
 // Operations generators
 
 const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outpath: string, assets: PackageAssets): Op[] => {
-  const specPackageName = "test-open-rpc-spec";
+  const specPackageName = "@open-rpc/spec";
   const deps = getPackageJsonSpecDependency(specPackageName)
   const ops: Op[] = [{ type: "rm", path: `${outpath}` }, { type: "mkdir", path: outpath }]
   return ops.concat(schemasNames.flatMap((name) => {
@@ -150,7 +150,7 @@ const generateTsOp = (getTranspiler: GetTranspiler, schemasNames: string[], outp
       { type: "write", path: `${outpath}/index.ts`, content: tsIndexFile(schemasNames,specPackageName) }
     ];
   })).concat([
-    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "test-open-rpc-spec-types", version: assets.version, dependencies: deps }), null, 2) },
+    { type: "write", path: `${outpath}/package.json`, content: JSON.stringify(buildPackageJson(schemasNames, { name: "@open-rpc/spec-types", version: assets.version, dependencies: deps }), null, 2) },
     { type: "write", path: `${outpath}/tsconfig.json`, content: JSON.stringify(buildTsConfig(), null, 2) },
     { type: "write", path: `${outpath}/CHANGELOG.md`, content: assets.changelogContents },
     { type: "compile", fileNames: [

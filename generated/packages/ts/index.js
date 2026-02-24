@@ -1,1 +1,1 @@
-export * as spec from "test-open-rpc-spec";
+export * as spec from "@open-rpc/spec";

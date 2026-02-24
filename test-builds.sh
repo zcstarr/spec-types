@@ -15,9 +15,9 @@ test_ts() {
 
   cd "$tmp"
   npm init -y > /dev/null 2>&1
-  npm install ./test-open-rpc-spec-types-*.tgz
+  npm install ./open-rpc-spec-types-*.tgz
 
-  node -e "import('test-open-rpc-spec-types').then(m => console.log('TS OK:', Object.keys(m)))"
+  node -e "import('@open-rpc/spec-types').then(m => console.log('TS OK:', Object.keys(m)))"
 }
 
 # --- Go ---
@@ -39,7 +39,7 @@ test_py() {
   cd "$tmp"
   python3.12 -m venv "$tmp/.venv"
   "$tmp/.venv/bin/python" -m pip install . --quiet
-  "$tmp/.venv/bin/python" -c "from test_open_rpc_spec_types import v1_4; print('Py OK')"
+  "$tmp/.venv/bin/python" -c "from open_rpc_spec_types import v1_4; print('Py OK')"
 }
 
 # --- Rust ---

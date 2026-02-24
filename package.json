@@ -1,5 +1,5 @@
 {
-  "name": "test-open-rpc-spec-types",
+  "name": "@open-rpc/spec-types",
   "module": "index.ts",
   "type": "module",
   "scripts": {
@@ -14,12 +14,12 @@
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.1",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@json-schema-tools/transpiler": "^1.10.5",
-    "eslint": "^10.0.0",
-    "eslint-config-prettier": "^10.1.8",
-    "test-open-rpc-spec": "^1.6.1"
+    "@open-rpc/spec": "^1.4.0"
   }
 }

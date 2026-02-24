@@ -5,9 +5,7 @@
       "name": "spec-types",
       "dependencies": {
         "@json-schema-tools/transpiler": "^1.10.5",
-        "eslint": "^10.0.0",
-        "eslint-config-prettier": "^10.1.8",
-        "test-open-rpc-spec": "^1.6.1",
+        "@open-rpc/spec": "^1.4.0",
       },
       "devDependencies": {
         "@iarna/toml": "^2.2.5",
@@ -16,6 +14,8 @@
         "@types/bun": "latest",
         "@types/node": "^25.3.0",
         "@typescript-eslint/eslint-plugin": "^8.55.0",
+        "eslint": "^10.0.0",
+        "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.5",
         "prettier": "^3.8.1",
         "typescript": "^5.9.3",
@@ -64,6 +64,8 @@
     "@json-schema-tools/transpiler": ["@json-schema-tools/transpiler@1.10.5", "", { "dependencies": { "@json-schema-tools/referencer": "^1.1.3", "@json-schema-tools/titleizer": "^1.0.9", "@json-schema-tools/traverse": "^1.10.4", "lodash.camelcase": "^4.3.0", "lodash.deburr": "^4.1.0", "lodash.snakecase": "^4.1.1", "lodash.trim": "^4.5.1" } }, "sha512-uRm43U8wKWQV8czvvkJYwcUERpQC+azKmqbd7RhV1gWx7s1t0frLtrWqGbXh9xMcgdtF7+Tkiwex48nW5EnX1w=="],
 
     "@json-schema-tools/traverse": ["@json-schema-tools/traverse@1.11.0", "", {}, "sha512-GWQRiXXsbt5ZuewItpW2nqB/D0x4pKWi6XXOwoh1wvmsU/tQSq/rKzpgGvOHTe6v30TYDwZYxuwnRnArIsUzLQ=="],
+
+    "@open-rpc/spec": ["@open-rpc/spec@1.4.0", "", {}, "sha512-PbfLgGMJZNUurFLFmu+5KU5CwQ6gKto3eLP8oVZh4Onf+paQkR/4L3/SYU8bqGwatMyXiqYwtXRjE6cenQkQ+g=="],
 
     "@pkgr/core": ["@pkgr/core@0.2.9", "", {}, "sha512-QNqXyfVS2wm9hweSYD2O7F0G06uurj9kZ96TRQE5Y9hU7+tgdZwIkbAKc5Ocy1HxEY2kuDQa6cQ1WRs/O5LFKA=="],
 
@@ -228,8 +230,6 @@
     "shebang-regex": ["shebang-regex@3.0.0", "", {}, "sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A=="],
 
     "synckit": ["synckit@0.11.12", "", { "dependencies": { "@pkgr/core": "^0.2.9" } }, "sha512-Bh7QjT8/SuKUIfObSXNHNSK6WHo6J1tHCqJsuaFDP7gP0fkzSfTxI8y85JrppZ0h8l0maIgc2tfuZQ6/t3GtnQ=="],
-
-    "test-open-rpc-spec": ["test-open-rpc-spec@1.6.1", "", {}, "sha512-5tS4VA3u1S+XeAlb29MGRGlIgcIfnOlmrjZBAKsjKdhcG5qMZG0SuBZa+TXEgzxhQJzYLGwRX5G0MVf8JPdaEA=="],
 
     "tinyglobby": ["tinyglobby@0.2.15", "", { "dependencies": { "fdir": "^6.5.0", "picomatch": "^4.0.3" } }, "sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ=="],
 

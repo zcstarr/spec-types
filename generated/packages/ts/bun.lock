@@ -1,0 +1,19 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "@open-rpc/spec-types",
+      "dependencies": {
+        "@open-rpc/spec": "1.4.0",
+      },
+      "devDependencies": {
+        "typescript": "^5.0.0",
+      },
+    },
+  },
+  "packages": {
+    "@open-rpc/spec": ["@open-rpc/spec@1.4.0", "", {}, "sha512-PbfLgGMJZNUurFLFmu+5KU5CwQ6gKto3eLP8oVZh4Onf+paQkR/4L3/SYU8bqGwatMyXiqYwtXRjE6cenQkQ+g=="],
+
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+  }
+}

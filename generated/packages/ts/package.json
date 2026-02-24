@@ -1,5 +1,5 @@
 {
-  "name": "test-open-rpc-spec-types",
+  "name": "@open-rpc/spec-types",
   "version": "0.0.3",
   "type": "module",
   "module": "index.ts",
@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "test-open-rpc-spec": "^1.6.1"
+    "@open-rpc/spec": "1.4.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

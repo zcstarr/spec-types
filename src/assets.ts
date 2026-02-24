@@ -11,7 +11,7 @@ export interface CargoTomlOptions {
 
 export const buildCargoToml = (
   schemaNames: string[],
-  opts: CargoTomlOptions = { name: "test-open-rpc-spec-types", version: "0.0.0" },
+  opts: CargoTomlOptions = { name: "@open-rpc/spec-types", version: "0.0.0" },
 ): object => ({
   package: {
     name: opts.name,
@@ -46,7 +46,7 @@ export interface PyProjectTomlOptions {
 }
 
 export const buildPyProjectToml = (
-  opts: PyProjectTomlOptions = { name: "test-open-rpc-spec-types", version: "0.0.0" },
+  opts: PyProjectTomlOptions = { name: "@open-rpc/spec-types", version: "0.0.0" },
 ): object => ({
   "build-system": {
     requires: ["hatchling"],
