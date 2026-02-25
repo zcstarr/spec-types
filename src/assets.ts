@@ -33,7 +33,10 @@ export interface GoModOptions {
 }
 
 export const buildGoMod = (
-  opts: GoModOptions = { module: "github.com/zcstarr/spec-types/generated/packages/go", goVersion: "1.24.5" },
+  opts: GoModOptions = {
+    module: "github.com/zcstarr/spec-types/generated/packages/go",
+    goVersion: "1.24.5",
+  },
   version?: string,
 ): string => {
   const versionComment = version ? ` // ${version}` : "";
@@ -46,7 +49,10 @@ export interface PyProjectTomlOptions {
 }
 
 export const buildPyProjectToml = (
-  opts: PyProjectTomlOptions = { name: "@open-rpc/spec-types", version: "0.0.0" },
+  opts: PyProjectTomlOptions = {
+    name: "@open-rpc/spec-types",
+    version: "0.0.0",
+  },
 ): object => ({
   "build-system": {
     requires: ["hatchling"],
@@ -76,7 +82,11 @@ export const buildTsConfig = () => ({
 
 export const buildPackageJson = (
   schemaNames: string[],
-  opts: PackageJsonOptions = { name: "@open-rpc/spec-types", version: "0.0.0", dependencies: {} },
+  opts: PackageJsonOptions = {
+    name: "@open-rpc/spec-types",
+    version: "0.0.0",
+    dependencies: {},
+  },
 ) => {
   const subpathExports = Object.fromEntries(
     schemaNames.map((name) => [

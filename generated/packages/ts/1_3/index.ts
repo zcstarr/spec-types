@@ -1,4 +1,30 @@
-export type Openrpc = "1.3.2" | "1.3.1" | "1.3.0" | "1.2.6" | "1.2.5" | "1.2.4" | "1.2.3" | "1.2.2" | "1.2.1" | "1.2.0" | "1.1.12" | "1.1.11" | "1.1.10" | "1.1.9" | "1.1.8" | "1.1.7" | "1.1.6" | "1.1.5" | "1.1.4" | "1.1.3" | "1.1.2" | "1.1.1" | "1.1.0" | "1.0.0" | "1.0.0-rc0" | "1.0.0-rc1";
+export type Openrpc =
+  | "1.3.2"
+  | "1.3.1"
+  | "1.3.0"
+  | "1.2.6"
+  | "1.2.5"
+  | "1.2.4"
+  | "1.2.3"
+  | "1.2.2"
+  | "1.2.1"
+  | "1.2.0"
+  | "1.1.12"
+  | "1.1.11"
+  | "1.1.10"
+  | "1.1.9"
+  | "1.1.8"
+  | "1.1.7"
+  | "1.1.6"
+  | "1.1.5"
+  | "1.1.4"
+  | "1.1.3"
+  | "1.1.2"
+  | "1.1.1"
+  | "1.1.0"
+  | "1.0.0"
+  | "1.0.0-rc0"
+  | "1.0.0-rc1";
 export type InfoObjectProperties = string;
 export type InfoObjectDescription = string;
 export type InfoObjectTermsOfService = string;
@@ -55,7 +81,9 @@ export interface ServerObjectVariable {
   enum?: ServerObjectVariableEnum;
   [k: string]: any;
 }
-export interface ServerObjectVariables { [key: string]: any; }
+export interface ServerObjectVariables {
+  [key: string]: any;
+}
 export interface ServerObject {
   url: ServerObjectUrl;
   name?: ServerObjectName;
@@ -145,24 +173,39 @@ export type StringArray = StringDoaGddGA[];
  * @default {}
  *
  */
-export interface Definitions { [key: string]: any; }
+export interface Definitions {
+  [key: string]: any;
+}
 /**
  *
  * @default {}
  *
  */
-export interface Properties { [key: string]: any; }
+export interface Properties {
+  [key: string]: any;
+}
 export type PropertyNames = any;
 /**
  *
  * @default {}
  *
  */
-export interface PatternProperties { [key: string]: any; }
+export interface PatternProperties {
+  [key: string]: any;
+}
 export type DependenciesSet = JSONSchema | StringArray;
-export interface Dependencies { [key: string]: any; }
+export interface Dependencies {
+  [key: string]: any;
+}
 export type Enum = AlwaysTrue[];
-export type SimpleTypes = "array" | "boolean" | "integer" | "null" | "number" | "object" | "string";
+export type SimpleTypes =
+  | "array"
+  | "boolean"
+  | "integer"
+  | "null"
+  | "number"
+  | "object"
+  | "string";
 export type ArrayOfSimpleTypes = SimpleTypes[];
 export type Type = SimpleTypes | ArrayOfSimpleTypes;
 export type Format = string;
@@ -239,7 +282,9 @@ export interface ContentDescriptorObject {
   deprecated?: ContentDescriptorObjectDeprecated;
   [regex: string]: SpecificationExtension | any;
 }
-export type ContentDescriptorOrReference = ContentDescriptorObject | ReferenceObject;
+export type ContentDescriptorOrReference =
+  | ContentDescriptorObject
+  | ReferenceObject;
 export type MethodObjectParams = ContentDescriptorOrReference[];
 export type MethodObjectResult = ContentDescriptorObject | ReferenceObject;
 /**
@@ -345,13 +390,27 @@ export interface MethodObject {
 }
 export type MethodOrReference = MethodObject | ReferenceObject;
 export type Methods = MethodOrReference[];
-export interface SchemaComponents { [key: string]: any; }
-export interface LinkComponents { [key: string]: any; }
-export interface ErrorComponents { [key: string]: any; }
-export interface ExampleComponents { [key: string]: any; }
-export interface ExamplePairingComponents { [key: string]: any; }
-export interface ContentDescriptorComponents { [key: string]: any; }
-export interface TagComponents { [key: string]: any; }
+export interface SchemaComponents {
+  [key: string]: any;
+}
+export interface LinkComponents {
+  [key: string]: any;
+}
+export interface ErrorComponents {
+  [key: string]: any;
+}
+export interface ExampleComponents {
+  [key: string]: any;
+}
+export interface ExamplePairingComponents {
+  [key: string]: any;
+}
+export interface ContentDescriptorComponents {
+  [key: string]: any;
+}
+export interface TagComponents {
+  [key: string]: any;
+}
 export interface Components {
   schemas?: SchemaComponents;
   links?: LinkComponents;

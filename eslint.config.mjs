@@ -18,6 +18,7 @@ export default [
     ignores: [
       "package.json",
       "node_modules/", 
+      "generated/",
       "**/dist/",
       "dist/", 
       "docs/",  // This will now work
