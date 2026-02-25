@@ -24,7 +24,7 @@ export type InfoObjectDescription = string;
 export type InfoObjectTermsOfService = string;
 /**
  *
- * The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-version) or the API implementation version).
+ * The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-document-openrpc) or the API implementation version).
  *
  */
 export type InfoObjectVersion = string;

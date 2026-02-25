@@ -18,7 +18,7 @@ InfoObjectDescription = NewType("InfoObjectDescription", str)
 """A URL to the Terms of Service for the API. MUST be in the format of a URL.
 """
 InfoObjectTermsOfService = NewType("InfoObjectTermsOfService", str)
-"""The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-version) or the API implementation version).
+"""The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-document-openrpc) or the API implementation version).
 """
 InfoObjectVersion = NewType("InfoObjectVersion", str)
 """The identifying name of the contact person/organization.

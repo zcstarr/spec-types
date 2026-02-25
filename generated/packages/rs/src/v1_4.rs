@@ -27,7 +27,7 @@ pub type InfoObjectDescription = String;
 pub type InfoObjectTermsOfService = String;
 /// InfoObjectVersion
 ///
-/// The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-version) or the API implementation version).
+/// The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-document-openrpc) or the API implementation version).
 ///
 pub type InfoObjectVersion = String;
 /// ContactObjectName

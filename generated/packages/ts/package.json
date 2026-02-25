@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "@open-rpc/spec": "1.4.0"
+    "@open-rpc/spec": "^1.4.0"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

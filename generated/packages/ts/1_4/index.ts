@@ -24,7 +24,7 @@ export type InfoObjectDescription = string;
 export type InfoObjectTermsOfService = string;
 /**
  *
- * The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-version) or the API implementation version).
+ * The version of the OpenRPC document (which is distinct from the [OpenRPC Specification version](#openrpc-document-openrpc) or the API implementation version).
  *
  */
 export type InfoObjectVersion = string;
@@ -177,9 +177,7 @@ export interface ServerObjectVariable {
  * A map between a variable name and its value. The value is passed into the [Runtime Expression](#runtime-expression) to produce a server URL.
  *
  */
-export interface ServerObjectVariables {
-  [key: string]: any;
-}
+export interface ServerObjectVariables { [key: string]: any; }
 /**
  *
  * A object representing a Server
@@ -196,7 +194,7 @@ export interface ServerObject {
 type AlwaysFalse = any;
 /**
  *
- * An array of Server Objects, which provide connectivity information to a target server. If the `servers` property is not provided, or is an empty array, the default value would be a [Server Object](#server-object) with a [url](#server-url) value of `localhost`.
+ * An array of Server Objects, which provide connectivity information to a target server. If the `servers` property is not provided, or is an empty array, the default value would be a [Server Object](#server-object) with a [url](#server-url) value of `localhost`. 
  *
  */
 export type Servers = ServerObject[];
@@ -326,39 +324,24 @@ export type StringArray = StringDoaGddGA[];
  * @default {}
  *
  */
-export interface Definitions {
-  [key: string]: any;
-}
+export interface Definitions { [key: string]: any; }
 /**
  *
  * @default {}
  *
  */
-export interface Properties {
-  [key: string]: any;
-}
+export interface Properties { [key: string]: any; }
 export type PropertyNames = any;
 /**
  *
  * @default {}
  *
  */
-export interface PatternProperties {
-  [key: string]: any;
-}
+export interface PatternProperties { [key: string]: any; }
 export type DependenciesSet = JSONSchema | StringArray;
-export interface Dependencies {
-  [key: string]: any;
-}
+export interface Dependencies { [key: string]: any; }
 export type Enum = AlwaysTrue[];
-export type SimpleTypes =
-  | "array"
-  | "boolean"
-  | "integer"
-  | "null"
-  | "number"
-  | "object"
-  | "string";
+export type SimpleTypes = "array" | "boolean" | "integer" | "null" | "number" | "object" | "string";
 export type ArrayOfSimpleTypes = SimpleTypes[];
 export type Type = SimpleTypes | ArrayOfSimpleTypes;
 export type Format = string;
@@ -419,9 +402,7 @@ export interface JSONSchemaObject {
  * @default {}
  *
  */
-export type ContentDescriptorObjectSchema =
-  | JSONSchemaObject
-  | JSONSchemaBoolean;
+export type ContentDescriptorObjectSchema = JSONSchemaObject | JSONSchemaBoolean;
 /**
  *
  * Determines if the content is a required field. Default value is `false`.
@@ -448,9 +429,7 @@ export interface ContentDescriptorObject {
   deprecated?: ContentDescriptorObjectDeprecated;
   [regex: string]: SpecificationExtension | any;
 }
-export type ContentDescriptorOrReference =
-  | ContentDescriptorObject
-  | ReferenceObject;
+export type ContentDescriptorOrReference = ContentDescriptorObject | ReferenceObject;
 /**
  *
  *  A list of parameters that are applicable for this method. The list MUST NOT include duplicated parameters and therefore require [name](#content-descriptor-name) to be unique. The list can use the [Reference Object](#reference-object) to link to parameters that are defined by the [Content Descriptor Object](#content-descriptor-object). All optional params (content descriptor objects with "required": false) MUST be positioned after all required params in the list.
@@ -673,57 +652,43 @@ export type Methods = MethodOrReference[];
  * An object to hold reusable [Schema Objects](#schema-object).
  *
  */
-export interface SchemaComponents {
-  [key: string]: any;
-}
+export interface SchemaComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Link Objects](#link-object).
  *
  */
-export interface LinkComponents {
-  [key: string]: any;
-}
+export interface LinkComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Error Objects](#error-object).
  *
  */
-export interface ErrorComponents {
-  [key: string]: any;
-}
+export interface ErrorComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Example Objects](#example-object).
  *
  */
-export interface ExampleComponents {
-  [key: string]: any;
-}
+export interface ExampleComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Example Pairing Objects](#example-pairing-object).
  *
  */
-export interface ExamplePairingComponents {
-  [key: string]: any;
-}
+export interface ExamplePairingComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Content Descriptor Objects](#content-descriptor-object).
  *
  */
-export interface ContentDescriptorComponents {
-  [key: string]: any;
-}
+export interface ContentDescriptorComponents { [key: string]: any; }
 /**
  *
  * An object to hold reusable [Tag Objects](#tag-object).
  *
  */
-export interface TagComponents {
-  [key: string]: any;
-}
+export interface TagComponents { [key: string]: any; }
 /**
  *
  * Holds a set of reusable objects for different aspects of the OpenRPC. All objects defined within the components object will have no effect on the API unless they are explicitly referenced from properties outside the components object.
